@@ -231,30 +231,6 @@ body {
   line-height: 1;
 }
 
-/* Botão secundário de download no topo */
-.btn-header-download {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.95rem;
-  min-height: 44px;
-  background-color: transparent;
-  border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.btn-header-download:hover {
-  color: var(--text-main);
-  border-color: var(--border-strong);
-  background-color: var(--bg-card);
-}
-
 /* --------------------------------------------------------------------------
    5. Área Principal (Main) e Hero
    -------------------------------------------------------------------------- */
@@ -1008,104 +984,7 @@ details[open] .accordion-arrow {
 }
 
 /* --------------------------------------------------------------------------
-   10. Seção de Download dos Arquivos e GitHub Pages
-   -------------------------------------------------------------------------- */
-.download-section {
-  margin-top: 2rem;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-}
-
-.download-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
-}
-
-.download-desc {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  line-height: 1.5;
-}
-
-.download-buttons-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-
-.btn-download-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.35rem;
-  min-height: 46px;
-  background-color: var(--accent-primary);
-  color: var(--accent-contrast);
-  font-weight: 700;
-  font-size: 0.925rem;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.btn-download-all:hover {
-  background-color: var(--accent-hover);
-  transform: translateY(-1px);
-}
-
-.btn-download-single {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.65rem 1rem;
-  min-height: 46px;
-  background-color: var(--bg-highlight);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-main);
-  font-weight: 500;
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.btn-download-single:hover {
-  background-color: var(--bg-card-hover);
-  border-color: var(--border-strong);
-}
-
-.github-steps-box {
-  background-color: var(--bg-input);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.github-steps-box h4 {
-  color: var(--text-main);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.github-steps-box ol {
-  padding-left: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-/* --------------------------------------------------------------------------
-   11. Rodapé (Footer)
+   10. Rodapé (Footer)
    -------------------------------------------------------------------------- */
 .site-footer {
   border-top: 1px solid var(--border-subtle);
@@ -1135,7 +1014,7 @@ details[open] .accordion-arrow {
 }
 
 /* --------------------------------------------------------------------------
-   12. Responsividade Mobile & Tablet
+   11. Responsividade Mobile & Tablet
    -------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .header-content {
@@ -1176,14 +1055,5 @@ details[open] .accordion-arrow {
   
   .forecast-grid > :last-child {
     grid-column: span 2;
-  }
-  
-  .download-buttons-row {
-    flex-direction: column;
-  }
-  
-  .btn-download-all, .btn-download-single {
-    width: 100%;
-    justify-content: center;
   }
 }
