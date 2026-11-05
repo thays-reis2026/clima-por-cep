@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Folha de Estilos Principal (CSS Puro) -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Folha de Estilos Principal (CSS Puro) com caminho relativo simples -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- ====================================================================
@@ -36,12 +36,6 @@
           <span class="btn-theme-icon" aria-hidden="true">🌙</span>
           <span>Modo Escuro</span>
         </button>
-
-        <!-- Botão rápido para baixar os arquivos do projeto -->
-        <a href="#baixar-arquivos" class="btn-header-download" title="Baixar código para GitHub Pages">
-          <span aria-hidden="true">📥</span>
-          <span>Baixar Código</span>
-        </a>
       </div>
     </div>
   </header>
@@ -337,52 +331,6 @@
       </details>
     </section>
 
-    <!-- ====================================================================
-         SEÇÃO DE DOWNLOAD DOS ARQUIVOS E GITHUB PAGES
-         ==================================================================== -->
-    <section id="baixar-arquivos" class="download-section" aria-labelledby="titulo-download">
-      <h3 id="titulo-download" class="download-title">
-        📦 Baixar Arquivos para o GitHub Pages
-      </h3>
-      <p class="download-desc">
-        Este projeto é 100% estático (apenas 3 arquivos fundamentais: <strong>index.html</strong>, <strong>style.css</strong> e <strong>script.js</strong>).
-        Você pode baixá-los abaixo e publicá-los no GitHub Pages sem precisar compilar nada.
-      </p>
-
-      <div class="download-buttons-row">
-        <!-- Botão que gera o ZIP com tudo empacotado -->
-        <button type="button" id="btn-download-all" class="btn-download-all">
-          <span aria-hidden="true">📦</span>
-          <span>Baixar Tudo (.ZIP)</span>
-        </button>
-
-        <!-- Botões de download individual de cada arquivo -->
-        <button type="button" class="btn-download-single" data-download-file="index.html">
-          📄 index.html
-        </button>
-        <button type="button" class="btn-download-single" data-download-file="style.css">
-          🎨 style.css
-        </button>
-        <button type="button" class="btn-download-single" data-download-file="script.js">
-          ⚡ script.js
-        </button>
-        <button type="button" class="btn-download-single" data-download-file="README.md">
-          📖 README.md
-        </button>
-      </div>
-
-      <!-- Passo a Passo Rápido para GitHub Pages -->
-      <div class="github-steps-box">
-        <h4>Como publicar no GitHub Pages em 3 minutos:</h4>
-        <ol>
-          <li>Crie um novo repositório público no seu GitHub (ex: <code>clima-por-cep</code>).</li>
-          <li>Suba os arquivos (<code>index.html</code>, <code>style.css</code>, <code>script.js</code> e <code>README.md</code>) na raiz do repositório.</li>
-          <li>Vá em <strong>Settings</strong> &gt; <strong>Pages</strong>.</li>
-          <li>Em <strong>Branch</strong>, selecione <code>main</code> e pasta <code>/ (root)</code>, depois clique em <strong>Save</strong>.</li>
-          <li>Pronto! O GitHub gerará o link do seu site no ar em instantes (ex: <code>https://seu-usuario.github.io/clima-por-cep/</code>).</li>
-        </ol>
-      </div>
-    </section>
   </main>
 
   <!-- ====================================================================
@@ -399,7 +347,7 @@
     </div>
   </footer>
 
-  <!-- Lógica Principal em JavaScript Puro -->
-  <script src="/script.js"></script>
+  <!-- Lógica Principal em JavaScript Puro com caminho relativo simples -->
+  <script src="script.js"></script>
 </body>
 </html>
