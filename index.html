@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clima por CEP - Previsão do Tempo Brasileira</title>
+  <meta name="description" content="Consulte a previsão do tempo para qualquer CEP brasileiro usando ViaCEP e Open-Meteo. Feito com HTML, CSS e JavaScript puro, sem chaves de API." />
+  
+  <!-- OpenGraph e Compartilhamento -->
+  <meta property="og:title" content="Clima por CEP - Previsão do Tempo Brasileira" />
+  <meta property="og:description" content="Descubra a temperatura atual, sensação térmica, umidade, vento e a previsão dos próximos 5 dias a partir do seu CEP." />
+  <meta property="og:type" content="website" />
+  
+  <!-- Fontes do Google: Plus Jakarta Sans para leitura limpa e algarismos tabulares -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Folha de Estilos Principal (CSS Puro) -->
+  <link rel="stylesheet" href="/style.css" />
+<script src="/_aistudio-iframe.js?v=1f94f900"></script></head>
+<body>
+  <!-- ====================================================================
+       CABEÇALHO / HEADER
+       ==================================================================== -->
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="./" class="brand" aria-label="Página inicial do Clima por CEP">
+        <span class="brand-icon" aria-hidden="true">🌦️</span>
+        <span class="brand-text">Clima por CEP</span>
+      </a>
+
+      <div class="header-actions">
+        <!-- Botão para alternar entre Modo Escuro e Claro -->
+        <button type="button" id="btn-tema" class="btn-theme" aria-label="Alternar para Modo Claro">
+          <span class="btn-theme-icon" aria-hidden="true">🌙</span>
+          <span>Modo Escuro</span>
+        </button>
+
+        <!-- Botão rápido para baixar os arquivos do projeto -->
+        <a href="#baixar-arquivos" class="btn-header-download" title="Baixar código para GitHub Pages">
+          <span aria-hidden="true">📥</span>
+          <span>Baixar Código</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       CONTEÚDO PRINCIPAL / MAIN
+       ==================================================================== -->
+  <main class="container">
+    <!-- Seção de Boas-Vindas / Hero -->
+    <section class="hero-section">
+      <h1 class="hero-title">
+        Previsão do tempo a partir do <span class="gradient-text">seu CEP</span>
+      </h1>
+      <p class="hero-subtitle">
+        Digite qualquer CEP do Brasil para ver o clima em tempo real e a previsão detalhada dos próximos 5 dias. Sem cadastro e sem chaves de API.
+      </p>
+    </section>
+
+    <!-- Formulário de Consulta -->
+    <section class="search-card" aria-labelledby="titulo-busca">
+      <h2 id="titulo-busca" class="sr-only">Buscar Clima por CEP</h2>
+      
+      <form id="form-cep" novalidate>
+        <div class="form-group">
+          <label for="cep-input" class="form-label">
+            CEP brasileiro (8 dígitos)
+          </label>
+
+          <div class="search-input-wrapper">
+            <div class="input-container">
+              <span class="input-icon" aria-hidden="true">📍</span>
+              <input
+                type="text"
+                id="cep-input"
+                name="cep"
+                class="cep-input"
+                placeholder="00000-000"
+                maxlength="9"
+                inputmode="numeric"
+                autocomplete="postal-code"
+                required
+                aria-describedby="cep-ajuda"
+                aria-required="true"
+              />
+              <button
+                type="button"
+                id="btn-limpar"
+                class="btn-clear"
+                aria-label="Limpar campo de CEP"
+                style="display: none;"
+                title="Limpar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <button type="submit" id="btn-buscar" class="btn-submit">
+              <span aria-hidden="true">🔍</span>
+              <span>Buscar Clima</span>
+            </button>
+          </div>
+
+          <p id="cep-ajuda" class="form-hint">
+            Digite com ou sem hífen (ex: <strong>01001-000</strong> ou <strong>01001000</strong>).
+          </p>
+        </div>
+
+        <!-- Exemplos rápidos de CEPs -->
+        <div class="quick-ceps">
+          <span class="quick-ceps-title">Exemplos para testar:</span>
+          <button type="button" class="chip-cep" data-cep="01001-000" title="São Paulo, SP">
+            01001-000 (SP)
+          </button>
+          <button type="button" class="chip-cep" data-cep="20040-002" title="Rio de Janeiro, RJ">
+            20040-002 (RJ)
+          </button>
+          <button type="button" class="chip-cep" data-cep="40026-010" title="Salvador, BA">
+            40026-010 (BA)
+          </button>
+          <button type="button" class="chip-cep" data-cep="70040-010" title="Brasília, DF">
+            70040-010 (DF)
+          </button>
+          <button type="button" class="chip-cep" data-cep="69005-040" title="Manaus, AM">
+            69005-040 (AM)
+          </button>
+          <button type="button" class="chip-cep" data-cep="80010-000" title="Curitiba, PR">
+            80010-000 (PR)
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Feedback: Aviso de Carregando (com anúncio acessível via aria-live) -->
+    <div id="status-container" class="status-loading oculto" aria-live="polite" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="status-texto" class="status-loading-text">Consultando CEP no ViaCEP...</p>
+      
+      <div class="loading-steps" aria-hidden="true">
+        <span id="step-1" class="step-item active">① Endereço</span>
+        <span>→</span>
+        <span id="step-2" class="step-item">② Coordenadas</span>
+        <span>→</span>
+        <span id="step-3" class="step-item">③ Previsão do Tempo</span>
+      </div>
+    </div>
+
+    <!-- Feedback: Caixa de Erro Acessível (inicia escondida e vazia) -->
+    <div id="erro-container" class="status-error oculto" role="alert" aria-live="assertive" hidden>
+      <span class="error-icon" aria-hidden="true">⚠️</span>
+      <div>
+        <h3 class="error-title">Atenção</h3>
+        <p id="erro-mensagem" class="error-message"></p>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         ÁREA DE RESULTADOS (Cartões do Clima)
+         ==================================================================== -->
+    <section id="resultado-container" class="results-area oculto" aria-label="Resultado da Previsão do Tempo" hidden>
+      
+      <!-- Card 1: Localização & Endereço Identificado -->
+      <article class="location-card">
+        <div class="location-primary">
+          <h2 id="res-cidade-uf" class="location-title">São Paulo - SP</h2>
+          <p id="res-endereco" class="location-address">Praça da Sé, Bairro Sé</p>
+        </div>
+
+        <div class="location-badges" aria-label="Metadados da localização">
+          <span id="badge-cep" class="meta-badge">CEP: 01001-000</span>
+          <span id="badge-regiao" class="meta-badge">Região: Sudeste</span>
+          <span id="badge-ddd" class="meta-badge">DDD: (11)</span>
+          <span id="badge-coords" class="meta-badge">Lat: -23.55 | Lon: -46.64</span>
+        </div>
+      </article>
+
+      <!-- Card 2: Tempo Agora (Destaque Principal) -->
+      <article class="current-weather-card">
+        <div class="weather-header">
+          <span class="weather-header-title">Condições Atuais</span>
+          <span id="res-hora-medicao" class="weather-updated">Medição atual</span>
+        </div>
+
+        <div class="weather-main-row">
+          <div class="temp-lockup">
+            <div id="res-emoji-atual" class="weather-emoji-large" aria-hidden="true">☀️</div>
+            <div class="temp-values">
+              <div id="res-temp-atual" class="current-temp">24°C</div>
+              <div id="res-desc-atual" class="weather-description">Céu limpo</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de Métricas Secundárias -->
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">Sensação Térmica</span>
+            <span id="res-sensacao" class="metric-value">25°C</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">Umidade Relativa</span>
+            <span id="res-umidade" class="metric-value">62%</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">Velocidade do Vento</span>
+            <span id="res-vento" class="metric-value">14 km/h</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: Previsão dos Próximos 5 Dias -->
+      <article class="forecast-card">
+        <h3 class="forecast-title">Previsão para os próximos 5 dias</h3>
+        <div id="forecast-grid" class="forecast-grid">
+          <!-- Os 5 cards diários são gerados dinamicamente via script.js -->
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ====================================================================
+         SEÇÃO RECOLHÍVEL: "COMO FUNCIONA" (Explicação das 3 APIs)
+         ==================================================================== -->
+    <section class="how-it-works-section" aria-labelledby="titulo-como-funciona">
+      <details id="como-funciona" class="accordion-card">
+        <summary class="accordion-summary">
+          <div class="accordion-title-wrap">
+            <span aria-hidden="true">💡</span>
+            <span id="titulo-como-funciona">Como funciona? (Entenda as 3 APIs usadas)</span>
+          </div>
+          <span class="accordion-arrow" aria-hidden="true">▾</span>
+        </summary>
+
+        <div class="accordion-body">
+          <p class="explanation-intro">
+            Você sabia que serviços de clima não entendem CEPs diretamente? Eles precisam de coordenadas (latitude e longitude).
+            Por isso, este site conecta <strong>3 APIs públicas e gratuitas em cadeia</strong> usando apenas JavaScript puro:
+          </p>
+
+          <div class="steps-list">
+            <!-- Passo 1: ViaCEP -->
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number" aria-hidden="true">1</span>
+                <span class="step-name">Passo 1: Descobrir a Cidade (ViaCEP)</span>
+              </div>
+              <p class="step-desc">
+                Consultamos o banco oficial de CEPs do Brasil para descobrir o nome da cidade, estado e bairro correspondente ao número digitado.
+              </p>
+              <table class="step-details-table">
+                <tbody>
+                  <tr>
+                    <td class="col-label">API Utilizada:</td>
+                    <td class="col-value">ViaCEP WebService (Gratuito e sem chave)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que enviamos:</td>
+                    <td class="col-value">O CEP com 8 números (ex: <code>01001000</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que recebemos:</td>
+                    <td class="col-value">Cidade ("São Paulo"), Estado ("SP"), Bairro ("Sé") e Logradouro</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Passo 2: Open-Meteo Geocoding -->
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number" aria-hidden="true">2</span>
+                <span class="step-name">Passo 2: Obter Coordenadas GPS (Open-Meteo Geocoding)</span>
+              </div>
+              <p class="step-desc">
+                Com o nome da cidade obtido no passo anterior, consultamos o serviço de geolocalização para transformar o nome da cidade em latitude e longitude.
+              </p>
+              <table class="step-details-table">
+                <tbody>
+                  <tr>
+                    <td class="col-label">API Utilizada:</td>
+                    <td class="col-value">Open-Meteo Geocoding API (Open-Source)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que enviamos:</td>
+                    <td class="col-value">Nome da cidade (ex: <code>São Paulo</code>) com filtro de país Brasil (BR)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que recebemos:</td>
+                    <td class="col-value">Latitude (<code>-23.55</code>), Longitude (<code>-46.64</code>) e Fuso Horário</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Passo 3: Open-Meteo Weather Forecast -->
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-number" aria-hidden="true">3</span>
+                <span class="step-name">Passo 3: Baixar a Previsão do Tempo (Open-Meteo Forecast)</span>
+              </div>
+              <p class="step-desc">
+                Com as coordenadas exatas em mãos, consultamos os supercomputadores e modelos meteorológicos para obter a temperatura atual e o prognóstico dos próximos 5 dias.
+              </p>
+              <table class="step-details-table">
+                <tbody>
+                  <tr>
+                    <td class="col-label">API Utilizada:</td>
+                    <td class="col-value">Open-Meteo Forecast API (Modelos GFS e ECMWF)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que enviamos:</td>
+                    <td class="col-value">Latitude, longitude, variáveis pedidas (temperatura, umidade, vento, chuva) e fuso auto</td>
+                  </tr>
+                  <tr>
+                    <td class="col-label">O que recebemos:</td>
+                    <td class="col-value">Tempo agora em °C, sensação, umidade (%), vento (km/h) e previsão diária com mín/máx e probabilidade de chuva</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Caixa de Inspeção ao Vivo da Última Consulta -->
+          <div class="live-inspect-box">
+            <div class="live-inspect-title">
+              <span aria-hidden="true">🔬</span>
+              <span>Dados técnicos da sua última pesquisa (em tempo real):</span>
+            </div>
+            <pre id="inspect-live-content" class="live-inspect-content">Faça uma busca por CEP acima para inspecionar os dados retornados pelas APIs em tempo real.</pre>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ====================================================================
+         SEÇÃO DE DOWNLOAD DOS ARQUIVOS E GITHUB PAGES
+         ==================================================================== -->
+    <section id="baixar-arquivos" class="download-section" aria-labelledby="titulo-download">
+      <h3 id="titulo-download" class="download-title">
+        📦 Baixar Arquivos para o GitHub Pages
+      </h3>
+      <p class="download-desc">
+        Este projeto é 100% estático (apenas 3 arquivos fundamentais: <strong>index.html</strong>, <strong>style.css</strong> e <strong>script.js</strong>).
+        Você pode baixá-los abaixo e publicá-los no GitHub Pages sem precisar compilar nada.
+      </p>
+
+      <div class="download-buttons-row">
+        <!-- Botão que gera o ZIP com tudo empacotado -->
+        <button type="button" id="btn-download-all" class="btn-download-all">
+          <span aria-hidden="true">📦</span>
+          <span>Baixar Tudo (.ZIP)</span>
+        </button>
+
+        <!-- Botões de download individual de cada arquivo -->
+        <button type="button" class="btn-download-single" data-download-file="index.html">
+          📄 index.html
+        </button>
+        <button type="button" class="btn-download-single" data-download-file="style.css">
+          🎨 style.css
+        </button>
+        <button type="button" class="btn-download-single" data-download-file="script.js">
+          ⚡ script.js
+        </button>
+        <button type="button" class="btn-download-single" data-download-file="README.md">
+          📖 README.md
+        </button>
+      </div>
+
+      <!-- Passo a Passo Rápido para GitHub Pages -->
+      <div class="github-steps-box">
+        <h4>Como publicar no GitHub Pages em 3 minutos:</h4>
+        <ol>
+          <li>Crie um novo repositório público no seu GitHub (ex: <code>clima-por-cep</code>).</li>
+          <li>Suba os arquivos (<code>index.html</code>, <code>style.css</code>, <code>script.js</code> e <code>README.md</code>) na raiz do repositório.</li>
+          <li>Vá em <strong>Settings</strong> &gt; <strong>Pages</strong>.</li>
+          <li>Em <strong>Branch</strong>, selecione <code>main</code> e pasta <code>/ (root)</code>, depois clique em <strong>Save</strong>.</li>
+          <li>Pronto! O GitHub gerará o link do seu site no ar em instantes (ex: <code>https://seu-usuario.github.io/clima-por-cep/</code>).</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       RODAPÉ / FOOTER
+       ==================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p class="footer-credit">
+        <strong>Clima por CEP</strong> &bull; Criado com Google AI Studio e personalizado por você.
+      </p>
+      <p class="footer-disclaimer">
+        Dados fornecidos gratuitamente por <a href="https://viacep.com.br" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">ViaCEP</a> e <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Open-Meteo</a>. Sem fins lucrativos.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Lógica Principal em JavaScript Puro -->
+  <script src="/script.js"></script>
+</body>
+</html>
